@@ -1,0 +1,143 @@
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+
+hostnam=$(hostname)
+usernam=$(whoami)
+temp="$(tty)"
+#   Chop off the first five chars of tty (ie /dev/):
+cur_tty="${temp:5}"
+unset temp
+
+function prompt_command {
+LASTSTATUS="$?"
+
+if (( $LASTSTATUS > 0 ))
+then
+  LASTCOLOR=$(tput setaf 1; tput bold)
+  LASTSTATUS="☠"
+else
+  LASTCOLOR=$(tput setaf 2; tput bold)
+  LASTSTATUS="✓"
+fi
+
+if type -t __git_ps1 >> /dev/null
+then
+  git_br=$(__git_ps1 "(%s)")
+  git_br=${git_br:1:-1}
+fi
+
+if (( ${#git_br} > 0 ))
+then
+  git_br_pre="┤"
+  git_br_post_color=$(tput setaf 6; tput bold)
+  git_br_post="├─"
+else
+  git_br_pre="─"
+  if (( $(tput colors) > 8 ))
+  then
+    git_br_post_color=$(tput setaf 32; tput bold)
+  else
+    git_br_post_color=$(tput setaf 4; tput bold)
+  fi
+  git_br_post="──"
+fi
+
+#   Find the width of the prompt:
+TERMWIDTH=${COLUMNS}
+
+#   Add all the accessories below ...
+local temp="──┤${usernam}@${hostnam}:${cur_tty}├───┤${PWD}├┤$git_br├──"
+
+let fillsize=${TERMWIDTH}-${#temp}
+if [ "$fillsize" -gt "0" ]
+then
+  fill="─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+  #   It's theoretically possible someone could need more 
+  #   dashes than above, but very unlikely!  HOWTO users, 
+  #   the above should be ONE LINE, it may not cut and
+  #   paste properly
+  fill="${fill:0:${fillsize}}"
+  newPWD="${PWD}"
+fi
+
+if [ "$fillsize" -lt "0" ]
+then
+  fill=""
+  let cut=3-${fillsize}
+  newPWD="...${PWD:${cut}}"
+fi
+}
+
+PROMPT_COMMAND=prompt_command
+
+function twtty {
+
+local WHITE="\[$(tput setaf 7; tput bold)\]"
+local NO_COLOUR="\[\033[0m\]"
+
+local LIGHT_BLUE="\[$(tput setaf 6; tput bold)\]"
+local BLUE="\[$(tput setaf 4; tput bold)\]"
+local YELLOW="\[$(tput setaf 3; tput bold)\]"
+local RED="\[$(tput setaf 1; tput bold)\]"
+local GREEN="\[$(tput setaf 2; tput bold)\]"
+
+# Get a number between 1 and 7 based on the hash of the hostname
+local HHASH=$(md5sum <<< $HOSTNAME)
+HHASH=$((16#${HHASH:0:32}))
+if [ $HHASH -lt 0 ]
+then
+  HHASH=$(($HHASH * -1))
+fi
+local HCOLOR=$(($HHASH % 6 + 1))
+
+if (( $(tput colors) > 8 ))
+then
+  BLUE="\[$(tput setaf 32; tput bold)\]"
+  HCOLOR=$(($HHASH % 230 + 1))
+  #if we picked black change it to white
+  if [[ $HCOLOR == 16 ]]
+  then
+    HCOLOR=255
+  fi
+fi
+
+local HOSTCOLOR="\[$(tput setaf $HCOLOR; tput bold)\]"
+
+case $TERM in
+    xterm*|rxvt*)
+        TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+        ;;
+    *)
+        TITLEBAR=""
+        ;;
+esac
+
+if [[ $usernam == 'root' ]]
+then
+  USERCOLOR=$RED
+else
+  USERCOLOR=$BLUE
+fi
+
+PS1="${TITLEBAR}\
+${BLUE}─${LIGHT_BLUE}─┤\
+${USERCOLOR}\${usernam}${LIGHT_BLUE}@${HOSTCOLOR}\${hostnam}${LIGHT_BLUE}:${WHITE}\${cur_tty}\
+${LIGHT_BLUE}├─${BLUE}─\${fill}${LIGHT_BLUE}─┤\
+${BLUE}\${newPWD}\
+${LIGHT_BLUE}├\${git_br_pre}${YELLOW}\${git_br}\[\${git_br_post_color}\]\${git_br_post}${BLUE}─\
+\n\
+${BLUE}─${LIGHT_BLUE}─┤\
+${BLUE}\$(date +%H%M)${LIGHT_BLUE}:${BLUE}\$(date \"+%a,%d %b %y\")\
+${LIGHT_BLUE}:${WHITE}\[\${LASTCOLOR}\]\${LASTSTATUS}${LIGHT_BLUE}├─\
+${BLUE}─\
+${NO_COLOUR} "
+
+PS2="${BLUE}─${LIGHT_BLUE}─┼─${BLUE}─${NO_COLOUR} "
+
+}
+
+twtty
