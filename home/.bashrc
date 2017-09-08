@@ -85,7 +85,7 @@ export PATH=~/bin:$PATH:/usr/bin:$MAVEN_HOME/bin:$CATALINA_HOME/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/jni/
 export SDC_KEY_ID=7d:2f:e4:0e:55:bd:6b:67:ce:1c:16:11:7a:5b:57:af
 export DEBFULLNAME="D. Stuart Freeman"
-export DEBEMAIL="stuart.freeman@et.gatech.edu"
+export DEBEMAIL="stuart.freeman@c21u.gatech.edu"
 
 # Set up make to utilize all processors
 if [[ `uname` == 'Linux' ]]
@@ -107,6 +107,6 @@ alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 
-source ~/src/nvm/nvm.sh
+[[ -s "$HOME/src/nvm/nvm.sh" ]] && source ~/src/nvm/nvm.sh
 
 [[ -s "$HOME/.bash_prompt" ]] && source "$HOME/.bash_prompt" # load bash prompt
