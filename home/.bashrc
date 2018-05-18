@@ -74,7 +74,7 @@ export HISTSIZE=3000
 export JAVA_HOME=$(dirname $(dirname $(readlink -f /etc/alternatives/javac)))
 export JAVA_OPTS='-Xms256m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=512m'
 export M2_HOME='/usr/share/maven'
-export MAVEN_OPTS='-Xms256m -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=300m'
+export MAVEN_OPTS='-Xms512m -Xmx2048m -XX:PermSize=128m -XX:MaxPermSize=512m'
 export CATALINA_HOME='/opt/tomcat'
 export CATALINA_LOGDIR=$CATALINA_HOME/logs
 alias rtc="/opt/tomcat/bin/shutdown.sh && sleep 2 && /opt/tomcat/bin/startup.sh && tail -f /opt/tomcat/logs/catalina.out"
