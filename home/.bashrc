@@ -81,7 +81,7 @@ alias rtc="/opt/tomcat/bin/shutdown.sh && sleep 2 && /opt/tomcat/bin/startup.sh 
 alias java="java $JAVA_OPTS"
 alias jdb="java -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
 
-export PATH=~/bin:$PATH:/usr/bin:$MAVEN_HOME/bin:$CATALINA_HOME/bin
+export PATH=~/bin:~/.yarn/bin:$PATH:/usr/bin:$MAVEN_HOME/bin:$CATALINA_HOME/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/jni/
 export SDC_KEY_ID=7d:2f:e4:0e:55:bd:6b:67:ce:1c:16:11:7a:5b:57:af
 export DEBFULLNAME="D. Stuart Freeman"
@@ -107,6 +107,7 @@ alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 
+export NODE_ENV=development
 [[ -s "$HOME/src/nvm/nvm.sh" ]] && source ~/src/nvm/nvm.sh
 
 [[ -s "$HOME/.bash_prompt" ]] && source "$HOME/.bash_prompt" # load bash prompt
