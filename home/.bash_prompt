@@ -46,11 +46,43 @@ else
   git_br_post="──"
 fi
 
+function virtualenv_info(){
+    # Get Virtual Env
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        # Strip out the path and just leave the env name
+        venv="${VIRTUAL_ENV##*/}"
+    else
+        # In case you don't have one activated
+        venv=''
+    fi
+    [[ -n "$venv" ]] && echo "$venv"
+}
+
+# disable the default virtualenv prompt change
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+VENV="$(virtualenv_info)";
+if (( ${#VENV} > 0 ))
+then
+  venv_pre="┤"
+  venv_post_color=$(tput setaf 6; tput bold)
+  venv_post="├─"
+else
+  venv_pre="─"
+  if (( $(tput colors) > 8 ))
+  then
+    venv_post_color=$(tput setaf 32; tput bold)
+  else
+    venv_post_color=$(tput setaf 4; tput bold)
+  fi
+  venv_post="──"
+fi
+
 #   Find the width of the prompt:
 TERMWIDTH=${COLUMNS}
 
 #   Add all the accessories below ...
-local temp="──┤${usernam}@${hostnam}:${cur_tty}├───┤${PWD}├┤$git_br├──"
+local temp="──┤${usernam}@${hostnam}:${cur_tty}├┤${VENV}├───┤${PWD}├┤$git_br├──"
 
 let fillsize=${TERMWIDTH}-${#temp}
 if [ "$fillsize" -gt "0" ]
@@ -126,7 +158,7 @@ fi
 PS1="${TITLEBAR}\
 ${BLUE}─${LIGHT_BLUE}─┤\
 ${USERCOLOR}\${usernam}${LIGHT_BLUE}@${HOSTCOLOR}\${hostnam}${LIGHT_BLUE}:${WHITE}\${cur_tty}\
-${LIGHT_BLUE}├─${BLUE}─\${fill}${LIGHT_BLUE}─┤\
+${LIGHT_BLUE}├\${venv_pre}${YELLOW}\${VENV}\[\${venv_post_color}\]\${venv_post}${BLUE}─\${fill}${LIGHT_BLUE}─┤\
 ${BLUE}\${newPWD}\
 ${LIGHT_BLUE}├\${git_br_pre}${YELLOW}\${git_br}\[\${git_br_post_color}\]\${git_br_post}${BLUE}─\
 \n\
