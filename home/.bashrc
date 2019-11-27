@@ -71,7 +71,7 @@ export HISTFILESIZE=3000
 export HISTSIZE=3000
 
 # Java stuff
-export JAVA_HOME=$(dirname $(dirname $(readlink -f /etc/alternatives/javac)))
+export JAVA_HOME=$(dirname $(dirname $(readlink -f /etc/alternatives/java)))
 export JAVA_OPTS='-Xms256m -Xmx1024m -XX:PermSize=64m -XX:MaxPermSize=512m'
 export M2_HOME='/usr/share/maven'
 export MAVEN_OPTS='-Xms512m -Xmx2048m -XX:PermSize=128m -XX:MaxPermSize=512m'
