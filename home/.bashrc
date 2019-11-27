@@ -115,3 +115,15 @@ export NODE_ENV=development
 [[ -s "$HOME/src/nvm/nvm.sh" ]] && source ~/src/nvm/nvm.sh
 
 [[ -s "$HOME/.bash_prompt" ]] && source "$HOME/.bash_prompt" # load bash prompt
+
+# Setup pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1
+then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
