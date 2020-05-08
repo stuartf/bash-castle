@@ -109,7 +109,9 @@ source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 
 export GPG_TTY=`tty`
 
-alias adl=$(aws ecr get-login --no-include-email --region us-east-1)
+function adl {
+  $(aws ecr get-login --no-include-email --region us-east-1)
+}
 
 export NODE_ENV=development
 [[ -s "$HOME/src/nvm/nvm.sh" ]] && source ~/src/nvm/nvm.sh
