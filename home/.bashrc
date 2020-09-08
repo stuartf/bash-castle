@@ -5,7 +5,7 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-export EMAIL=stuart.freeman@et.gatech.edu
+export EMAIL=stuart.freeman@c21u.gatech.edu
 
 # vi keybindings
 set -o vi
